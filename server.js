@@ -1,26 +1,24 @@
 var http = require("http");
 var url = require("url");
 
-function start(route){
+var host = process.env.VCAP_APP_HOST || 'localhost';
+
+var port = process.env.VCAP_APP_PORT || 3000
+
+function start(route, handle){
 	function OnRequest(request, response){
 		var pathname = url.parse(request.url).pathname;		
 		console.log("Request for " + pathname + " received.");
-		route(pathname);
+		
 		//console.log("Request reveived.");
 		response.writeHead(200, {"Content-Type": "text/plain"});
-		response.write("Hello Enzo\n");
-		response.write("Hello Enzo\n");
-		// for(var i=0;i<100;i++){
-		// response.write("Hello Enzo\n");
-			// response.write(i);
-			// if(i%2 > 0){
-				// response.write("<br />");
-			// }
-		// }
-		response.write(request.url);
-		response.end();
+    var content = route(handle, pathname)
+    response.write(content);
+    response.end();		
+		
+		//response.write(request.url);		
 	}
-	http.createServer(OnRequest).listen(1377);
+	http.createServer(OnRequest).listen(port);
 	console.log("Server has started.")
 }
 exports.start = start;
