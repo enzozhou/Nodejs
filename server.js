@@ -1,3 +1,7 @@
+/*
+
+*/
+
 var http = require("http");
 var url = require("url");
 
@@ -12,7 +16,7 @@ function start(route, handle){
 		
 		//console.log("Request reveived.");
 		response.writeHead(200, {"Content-Type": "text/plain"});
-    var content = route(handle, pathname)
+    var content = route(handle, pathname, response)
     response.write(content);
     response.end();		
 		
